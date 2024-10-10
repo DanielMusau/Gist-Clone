@@ -16,7 +16,7 @@ module.exports = {
       colors: {
         dmDark: {
           dark: "#010101",
-          DEFAULT: "3C3B3B",
+          DEFAULT: "#3C3B3B",
           light: "#828282"
         },
         dmPurple: {
@@ -24,7 +24,7 @@ module.exports = {
           DEFAULT: "#A834A5",
           light: "#E88FE5"
         },
-        emLavender: {
+        dmLavender: {
           dark: "#8C52FF",
           DEFAULT: "#9D74EE",
           light: "#BC9AFF"

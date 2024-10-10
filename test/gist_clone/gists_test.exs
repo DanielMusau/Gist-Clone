@@ -21,7 +21,12 @@ defmodule GistClone.GistsTest do
     end
 
     test "create_gist/1 with valid data creates a gist" do
-      valid_attrs = %{description: "some description", markup_text: "some markup_text", name: "some name", uuid: "7488a646-e31f-11e4-aace-600308960662"}
+      valid_attrs = %{
+        description: "some description",
+        markup_text: "some markup_text",
+        name: "some name",
+        uuid: "7488a646-e31f-11e4-aace-600308960662"
+      }
 
       assert {:ok, %Gist{} = gist} = Gists.create_gist(valid_attrs)
       assert gist.description == "some description"
@@ -36,7 +41,13 @@ defmodule GistClone.GistsTest do
 
     test "update_gist/2 with valid data updates the gist" do
       gist = gist_fixture()
-      update_attrs = %{description: "some updated description", markup_text: "some updated markup_text", name: "some updated name", uuid: "7488a646-e31f-11e4-aace-600308960668"}
+
+      update_attrs = %{
+        description: "some updated description",
+        markup_text: "some updated markup_text",
+        name: "some updated name",
+        uuid: "7488a646-e31f-11e4-aace-600308960668"
+      }
 
       assert {:ok, %Gist{} = gist} = Gists.update_gist(gist, update_attrs)
       assert gist.description == "some updated description"

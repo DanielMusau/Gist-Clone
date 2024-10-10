@@ -21,7 +21,10 @@ defmodule GistClone.CommentsTest do
     end
 
     test "create_comment/1 with valid data creates a comment" do
-      valid_attrs = %{markup_text: "some markup_text", uuid: "7488a646-e31f-11e4-aace-600308960662"}
+      valid_attrs = %{
+        markup_text: "some markup_text",
+        uuid: "7488a646-e31f-11e4-aace-600308960662"
+      }
 
       assert {:ok, %Comment{} = comment} = Comments.create_comment(valid_attrs)
       assert comment.markup_text == "some markup_text"
@@ -34,7 +37,11 @@ defmodule GistClone.CommentsTest do
 
     test "update_comment/2 with valid data updates the comment" do
       comment = comment_fixture()
-      update_attrs = %{markup_text: "some updated markup_text", uuid: "7488a646-e31f-11e4-aace-600308960668"}
+
+      update_attrs = %{
+        markup_text: "some updated markup_text",
+        uuid: "7488a646-e31f-11e4-aace-600308960668"
+      }
 
       assert {:ok, %Comment{} = comment} = Comments.update_comment(comment, update_attrs)
       assert comment.markup_text == "some updated markup_text"
