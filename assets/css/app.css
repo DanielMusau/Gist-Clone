@@ -17,6 +17,11 @@
     font-style: normal;
 }
 
+.dm-gradient {
+    /* background-image: linear-gradient(to bottom, #631A61, #551653, #340E33, #010101); */
+    height: 225px;
+}
+
 .dropdown-menu-arrow::before {
     content: "";
     position: absolute;
@@ -32,6 +37,31 @@
 
 .menu-item:hover {
     @apply hover:text-dmDark-light;
+}
+
+form input[type="text"] {
+    @apply bg-dmDark-dark font-brand font-regular text-white text-xs border border-white
+}
+
+form input[type="text"]:focus {
+    @apply focus:outline-none focus:border-dmLavender focus:ring-0
+}
+
+.textarea {
+    @apply bg-dmDark-dark font-brand font-regular text-white text-xs border border-white h-[300px] resize-none;
+    border-top: none;
+}
+
+.textarea:focus {
+    @apply focus:outline-none focus:border-white focus:ring-0
+}
+
+.create-button {
+    @apply bg-dmDark border border-white font-brand font-regular text-white text-base
+}
+
+.create-button:hover {
+    @apply hover:bg-dmDark-light
 }
 
 .round-image-padding {
