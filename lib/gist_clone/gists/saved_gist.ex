@@ -17,7 +17,7 @@ defmodule GistClone.Gists.SavedGist do
   @doc false
   def changeset(saved_gist, attrs) do
     saved_gist
-    |> cast(attrs, [:uuid, :user_id, :gist_id])
-    |> validate_required([:uuid, :user_id, :gist_id])
+    |> cast(attrs, [:user_id, :gist_id])
+    |> validate_required([:user_id, :gist_id])
   end
 end

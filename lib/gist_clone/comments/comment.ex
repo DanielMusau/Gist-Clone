@@ -18,7 +18,7 @@ defmodule GistClone.Comments.Comment do
   @doc false
   def changeset(comment, attrs) do
     comment
-    |> cast(attrs, [:uuid, :markup_text, :user_id, :gist_id])
-    |> validate_required([:uuid, :markup_text, :user_id, :gist_id])
+    |> cast(attrs, [:markup_text, :user_id, :gist_id])
+    |> validate_required([:markup_text, :user_id, :gist_id])
   end
 end

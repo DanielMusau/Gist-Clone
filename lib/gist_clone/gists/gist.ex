@@ -4,6 +4,7 @@ defmodule GistClone.Gists.Gist do
 
   alias GistClone.Accounts.User
   alias GistClone.Comments.Comment
+  alias GistClone.Gists.SavedGist
 
   schema "gists" do
     field :uuid, Ecto.UUID, autogenerate: true
@@ -13,6 +14,7 @@ defmodule GistClone.Gists.Gist do
 
     belongs_to :user, User
     has_many :comments, Comment
+    has_many :saved_gists, SavedGist
 
     timestamps(type: :utc_datetime)
   end
@@ -20,7 +22,7 @@ defmodule GistClone.Gists.Gist do
   @doc false
   def changeset(gist, attrs) do
     gist
-    |> cast(attrs, [:uuid, :name, :description, :markup_text, :user_id])
-    |> validate_required([:uuid, :name, :description, :markup_text, :user_id])
+    |> cast(attrs, [:name, :description, :markup_text, :user_id])
+    |> validate_required([:name, :user_id])
   end
 end

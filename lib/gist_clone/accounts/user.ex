@@ -2,6 +2,9 @@ defmodule GistClone.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  alias GistClone.Comments.Comment
+  alias GistClone.Gists.{Gist, SavedGist}
+
   schema "users" do
     field :uuid, Ecto.UUID, autogenerate: true
     field :email, :string
@@ -9,6 +12,10 @@ defmodule GistClone.Accounts.User do
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
+
+    has_many :gists, Gist
+    has_many :comments, Comment
+    has_many :saved_gists, SavedGist
 
     timestamps(type: :utc_datetime)
   end
