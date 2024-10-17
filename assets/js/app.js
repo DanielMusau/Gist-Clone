@@ -23,7 +23,46 @@ import {LiveSocket} from "phoenix_live_view"
 import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
-let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}})
+
+let Hooks = {};
+
+// New hook for updating line numbers
+Hooks.UpdateLineNumbers = {
+    // life cycle method that is triggered when the component is mounted to the DOM
+    mounted() {
+        // event listener for input event on the textarea
+        this.el.addEventListener("input", () => {
+            // call the UpdateLineNumbers function
+            this.UpdateLineNumbers()
+        })
+
+        // event listener for scroll event on the textarea
+        this.el.addEventListener("scroll", () => {
+            const lineNumberText = document.querySelector("#line-numbers")
+            lineNumberText.scrollTop = this.el.scrollTop
+        })
+        // call it when our element is initialized
+        this.UpdateLineNumbers()
+    },
+
+    // function to update the line numbers
+    UpdateLineNumbers() {
+        const lineNumberText = document.querySelector("#line-numbers")
+        // if the element does not exist, return
+        if (!lineNumberText) return;
+        
+        // split the textarea value by new line
+        const lines = this.el.value.split("\n");
+
+        // create a string of numbers from 1 to the number of lines
+        const numbers = lines.map((_, index) => index + 1).join("\n") + "\n"
+
+        // set the text content of the element to the numbers string
+        lineNumberText.value = numbers
+    }
+};
+
+let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits
 topbar.config({barColors: {0: "#29d"}, shadowColor: "rgba(0, 0, 0, .3)"})
