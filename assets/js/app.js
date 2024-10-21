@@ -15,6 +15,8 @@
 //     import "some-package"
 //
 
+import hljs from "highlight.js"
+
 // Include phoenix_html to handle method=PUT/DELETE in forms and buttons.
 import "phoenix_html"
 // Establish Phoenix Socket and LiveView configuration.
@@ -26,10 +28,50 @@ let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("
 
 let Hooks = {};
 
+// New hook for highlighting code
+Hooks.Highlight = {
+    mounted() {
+        let name = this.el.getAttribute("data-name");
+        let codeBlock = this.el.querySelector("pre code");
+
+        if (name && codeBlock) {
+            codeBlock.className = codeBlock.className.replace(/language-\S+/g, "");
+            codeBlock.classList.add(`language-${this.getSyntaxType(name)}`);
+            hljs.highlightElement(codeBlock);
+        }
+    },
+
+    getSyntaxType(name) {
+        let extension = name.split(".").pop();
+
+        switch (extension) {
+            case "txt":
+                return "text";
+
+            case "json":
+                return "json";
+
+            case "html":
+                return "html";
+
+            case "heex":
+                return "html";
+
+            case "js":
+                return "javascript";
+
+            default:
+                return "elixir";
+        }
+    }
+};
+
 // New hook for updating line numbers
 Hooks.UpdateLineNumbers = {
     // life cycle method that is triggered when the component is mounted to the DOM
     mounted() {
+        const lineNumberText = document.querySelector("#line-numbers")
+
         // event listener for input event on the textarea
         this.el.addEventListener("input", () => {
             // call the UpdateLineNumbers function
@@ -38,9 +80,27 @@ Hooks.UpdateLineNumbers = {
 
         // event listener for scroll event on the textarea
         this.el.addEventListener("scroll", () => {
-            const lineNumberText = document.querySelector("#line-numbers")
             lineNumberText.scrollTop = this.el.scrollTop
         })
+
+        // event listener for keydown event on the textarea
+        // if the key is Tab, it will allow the user to add tab spaces.
+        this.el.addEventListener("keydown", (event) => {
+            if (event.key == "Tab") {
+                event.preventDefault()
+                var start = this.el.selectionStart;
+                var end = this.el.selectionEnd;
+                this.el.value = this.el.value.substring(0, start) + "\t" + this.el.value.substring(end);
+                this.el.selectionStart = this.el.selectionEnd = start + 1;
+            }
+        })
+
+        // event listener for clear-textarea event after creating the gist.
+        this.handleEvent("clear-textarea", () => {
+            this.el.value = ""
+            lineNumberText.value = "1\n"
+        })
+
         // call it when our element is initialized
         this.UpdateLineNumbers()
     },

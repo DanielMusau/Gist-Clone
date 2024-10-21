@@ -1,7 +1,7 @@
 defmodule GistCloneWeb.CreateGistLive do
-  alias GistClone.Gists.Gist
   use GistCloneWeb, :live_view
   import Phoenix.HTML.Form
+
   alias GistClone.{Gists, Gists.Gist}
 
   def mount(_params, _session, socket) do
@@ -25,9 +25,12 @@ defmodule GistCloneWeb.CreateGistLive do
 
   def handle_event("create", %{"gist" => params}, socket) do
     case Gists.create_gist(socket.assigns.current_user, params) do
-      {:ok, _gist} ->
+      {:ok, gist} ->
+        socket = push_event(socket, "clear-textarea", %{})
         changeset = Gists.change_gist(%Gist{})
-        {:noreply, assign(socket, :form, to_form(changeset))}
+        socket = assign(socket, form: to_form(changeset))
+        # Navigate to show the gist after successful creation
+        {:noreply, push_navigate(socket, to: ~p"/gist?#{[id: gist]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :form, to_form(changeset))}
