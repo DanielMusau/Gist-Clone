@@ -67,6 +67,22 @@ form input[type="text"]:focus {
     @apply focus:outline-none focus:border-white focus:ring-0;
 }
 
+.syntax-area {
+    @apply bg-dmSyntax border border-white text-xs h-auto;
+    border-top: none;
+    border-left: none;
+}
+
+.syntax-numbers {
+    @apply border border-white font-brand py-[12px] text-xs text-dmDark-light bg-dmSyntax h-auto w-[54px] text-right overflow-hidden resize-none;
+    border-right: none;
+    border-top: none;
+}
+
+.syntax-numbers:focus {
+    @apply focus:outline-none focus:border-white focus:ring-0;
+}
+
 .create-button {
     @apply bg-dmDark border border-white font-brand font-regular text-white text-base
 }

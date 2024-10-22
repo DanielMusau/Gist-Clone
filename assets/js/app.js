@@ -26,6 +26,22 @@ import topbar from "../vendor/topbar"
 
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
+// function to update the line numbers
+function UpdateLineNumbers(value) {
+    const lineNumberText = document.querySelector("#line-numbers")
+    // if the element does not exist, return
+    if (!lineNumberText) return;
+    
+    // split the textarea value by new line
+    const lines = value.split("\n");
+
+    // create a string of numbers from 1 to the number of lines
+    const numbers = lines.map((_, index) => index + 1).join("\n") + "\n"
+
+    // set the text content of the element to the numbers string
+    lineNumberText.value = numbers
+};
+
 let Hooks = {};
 
 // New hook for highlighting code
@@ -37,7 +53,9 @@ Hooks.Highlight = {
         if (name && codeBlock) {
             codeBlock.className = codeBlock.className.replace(/language-\S+/g, "");
             codeBlock.classList.add(`language-${this.getSyntaxType(name)}`);
-            hljs.highlightElement(codeBlock);
+            trimmed = this.trimCodeBlock(codeBlock);
+            hljs.highlightElement(trimmed);
+            UpdateLineNumbers(trimmed.textContent);
         }
     },
 
@@ -63,6 +81,18 @@ Hooks.Highlight = {
             default:
                 return "elixir";
         }
+    },
+
+    trimCodeBlock(codeBlock) {
+        const lines = codeBlock.textContent.split("\n")
+
+        if (lines.length > 2) {
+            lines.shift();
+            lines.pop();
+        }
+        codeBlock.textContent = lines.join("\n")
+
+        return codeBlock
     }
 };
 
@@ -75,7 +105,7 @@ Hooks.UpdateLineNumbers = {
         // event listener for input event on the textarea
         this.el.addEventListener("input", () => {
             // call the UpdateLineNumbers function
-            this.UpdateLineNumbers()
+            UpdateLineNumbers(this.el.value)
         })
 
         // event listener for scroll event on the textarea
@@ -102,23 +132,7 @@ Hooks.UpdateLineNumbers = {
         })
 
         // call it when our element is initialized
-        this.UpdateLineNumbers()
-    },
-
-    // function to update the line numbers
-    UpdateLineNumbers() {
-        const lineNumberText = document.querySelector("#line-numbers")
-        // if the element does not exist, return
-        if (!lineNumberText) return;
-        
-        // split the textarea value by new line
-        const lines = this.el.value.split("\n");
-
-        // create a string of numbers from 1 to the number of lines
-        const numbers = lines.map((_, index) => index + 1).join("\n") + "\n"
-
-        // set the text content of the element to the numbers string
-        lineNumberText.value = numbers
+        UpdateLineNumbers(this.el.value)
     }
 };
 
