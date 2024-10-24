@@ -136,6 +136,35 @@ Hooks.UpdateLineNumbers = {
     }
 };
 
+Hooks.CopyToClipboard = {
+    mounted() {
+        this.el.addEventListener("click", (event) => {
+            const textToCopy = this.el.getAttribute("data-clipboard-gist");
+            if (textToCopy) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalContent = this.el.innerHTML; // Store original SVG content
+
+                    // Change button content to tick and set style
+                    this.el.innerHTML = "&#10003;"; 
+                    this.el.style.color = "white";
+                    this.el.style.fontSize = "1.1rem";
+
+                    // After 3 seconds, restore original content (SVG)
+                    setTimeout(() => {
+                        this.el.innerHTML = originalContent;
+                        this.el.style.color = ""; // Reset color
+                        this.el.style.fontSize = ""; // Reset font size
+                    }, 3000);
+                }).catch((error) => {
+                    console.error("Error copying text: ", error);
+                });
+            }
+        });
+    }
+};
+
+
+
 let liveSocket = new LiveSocket("/live", Socket, {params: {_csrf_token: csrfToken}, hooks: Hooks})
 
 // Show progress bar on live navigation and form submits

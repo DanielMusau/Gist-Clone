@@ -11,7 +11,7 @@
           <%= @current_user.email %><span> / </span><%= @gist.name %>
         </div>
         <div class="text-lg text-white font-bold">
-          <%= @gist.updated_at %>
+          <%= "Created #{@gist.rel_time}" %>
         </div>
         <p class="text-left text-sm text-white font-brand"><%= @gist.description %></p>
       </div>
@@ -33,13 +33,26 @@
       <%= @gist.name %>
     </div>
     <div>
-      <button class="px-1" type="button" phx-click={}>
-        <img src="/images/delete.svg" alt="Delete Button" />
-      </button>
-      <button class="px-1" type="button" phx-click={}>
-        <img src="/images/edit.svg" alt="Edit Button" />
-      </button>
-      <button class="px-1" type="button" phx-click={}>
+      <%= if @current_user.id == @gist.user_id do %>
+        <button
+          class="interactive-img-button px-1"
+          type="button"
+          phx-click="delete"
+          phx-value-id={@gist.id}
+        >
+          <img src="/images/delete.svg" alt="Delete Button" />
+        </button>
+        <button class="interactive-img-button px-1" type="button" phx-click="edit">
+          <img src="/images/edit.svg" alt="Edit Button" />
+        </button>
+      <% end %>
+      <button
+        id="copy-button"
+        class="interactive-img-button px-1"
+        type="button"
+        phx-hook="CopyToClipboard"
+        data-clipboard-gist={@gist.markup_text}
+      >
         <img src="/images/copy.svg" alt="Copy Button" />
       </button>
     </div>

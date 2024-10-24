@@ -107,3 +107,11 @@ form input[type="text"]:focus {
     border-color: white transparent transparent transparent;
     border-style: solid;
 }
+
+.interactive-img-button img:hover{
+    filter: brightness(60%);
+}
+
+.interactive-img-button img:active {
+    scale: 1.2;
+}
