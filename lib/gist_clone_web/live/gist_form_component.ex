@@ -4,12 +4,6 @@ defmodule GistCloneWeb.GistFormComponent do
   alias GistClone.{Gists, Gists.Gist}
 
   def mount(socket) do
-    socket =
-      assign(
-        socket,
-        form: to_form(Gists.change_gist(%Gist{}))
-      )
-
     {:ok, socket}
   end
 
@@ -18,6 +12,7 @@ defmodule GistCloneWeb.GistFormComponent do
     <div>
       <.form for={@form} phx-submit="create" phx-change="validate" phx-target={@myself}>
         <div class="justify-center px-28 w-full space-y-4 mb-10">
+          <%= hidden_input(@form, :id, value: @id) %>
           <.input
             field={@form[:description]}
             placeholder="Gist description..."
@@ -51,7 +46,11 @@ defmodule GistCloneWeb.GistFormComponent do
             </div>
           </div>
           <div class="flex justify-end">
-            <.button class="create-button" phx-disable-with="Creating...">Create gist</.button>
+            <%= if @id == :new do %>
+              <.button class="create-button" phx-disable-with="Creating...">Create gist</.button>
+            <% else %>
+              <.button class="create-button" phx-disable-with="Updating...">Update gist</.button>
+            <% end %>
           </div>
         </div>
       </.form>
@@ -69,8 +68,14 @@ defmodule GistCloneWeb.GistFormComponent do
   end
 
   def handle_event("create", %{"gist" => params}, socket) do
-    IO.inspect(socket, label: "socket")
+    if params["id"] == "new" do
+      create_gist(params, socket)
+    else
+      update_gist(params, socket)
+    end
+  end
 
+  defp create_gist(params, socket) do
     case Gists.create_gist(socket.assigns.current_user, params) do
       {:ok, gist} ->
         socket = push_event(socket, "clear-textarea", %{})
@@ -81,6 +86,17 @@ defmodule GistCloneWeb.GistFormComponent do
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :form, to_form(changeset))}
+    end
+  end
+
+  defp update_gist(params, socket) do
+    case Gists.update_gist(socket.assigns.current_user, params) do
+      {:ok, gist} ->
+        {:noreply, push_navigate(socket, to: ~p"/gist?#{[id: gist]}")}
+
+      {:error, message} ->
+        socket = put_flash(socket, :error, message)
+        {:noreply, socket}
     end
   end
 end

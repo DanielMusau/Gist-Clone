@@ -27,8 +27,8 @@ import topbar from "../vendor/topbar"
 let csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute("content")
 
 // function to update the line numbers
-function UpdateLineNumbers(value) {
-    const lineNumberText = document.querySelector("#line-numbers")
+function UpdateLineNumbers(value, element_id="#line-numbers") {
+    const lineNumberText = document.querySelector(element_id)
     // if the element does not exist, return
     if (!lineNumberText) return;
     
@@ -55,7 +55,7 @@ Hooks.Highlight = {
             codeBlock.classList.add(`language-${this.getSyntaxType(name)}`);
             trimmed = this.trimCodeBlock(codeBlock);
             hljs.highlightElement(trimmed);
-            UpdateLineNumbers(trimmed.textContent);
+            UpdateLineNumbers(trimmed.textContent, "#syntax-numbers");
         }
     },
 
@@ -162,6 +162,19 @@ Hooks.CopyToClipboard = {
         });
     }
 };
+
+Hooks.ToggleEdit = {
+    mounted() {
+        this.el.addEventListener("click", (event) => {
+            let edit = document.getElementById("edit-section")
+            let syntax = document.getElementById("syntax-section")
+            if (edit && syntax) {
+                edit.style.display = "block"
+                syntax.style.display = "none"
+            }
+        })
+    }
+}
 
 
 

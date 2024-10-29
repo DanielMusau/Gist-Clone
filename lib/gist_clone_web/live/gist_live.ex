@@ -2,6 +2,7 @@ defmodule GistCloneWeb.GistLive do
   use GistCloneWeb, :live_view
 
   alias GistClone.Gists
+  alias GistCloneWeb.GistFormComponent
 
   def mount(%{"id" => id}, _session, socket) do
     gist = Gists.get_gist!(id)
@@ -11,7 +12,7 @@ defmodule GistCloneWeb.GistLive do
     {:ok, assign(socket, gist: gist)}
   end
 
-  def handle_event("delete", %{"id" => id} = attrs, socket) do
+  def handle_event("delete", %{"id" => id}, socket) do
     case Gists.delete_gist(socket.assigns.current_user, id) do
       {:ok, _gist} ->
         socket = put_flash(socket, :info, "Gist deleted successfully")
@@ -22,8 +23,4 @@ defmodule GistCloneWeb.GistLive do
         {:noreply, socket}
     end
   end
-
-  # def handle_event("edit", %{id: id}, socket) do
-  #   case(Gists.update_gist())
-  # end
 end

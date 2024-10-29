@@ -71,8 +71,8 @@ defmodule GistClone.Gists do
       {:error, %Ecto.Changeset{}}
 
   """
-  def update_gist(%User{} = user, gist_id, attrs) do
-    gist = Repo.get!(Gist, gist_id)
+  def update_gist(%User{} = user, attrs) do
+    gist = Repo.get!(Gist, attrs["id"])
 
     if user.id == gist.user_id do
       gist
