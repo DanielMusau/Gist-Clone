@@ -23,6 +23,12 @@ defmodule GistClone.Gists do
     Repo.all(Gist)
   end
 
+  def return_sorted_gists do
+    Gist
+    |> order_by(desc: :updated_at)
+    |> Repo.all()
+  end
+
   @doc """
   Gets a single gist.
 
