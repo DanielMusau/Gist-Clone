@@ -4,8 +4,8 @@ defmodule GistCloneWeb.GistLive do
   alias GistClone.Gists
   alias GistCloneWeb.{GistFormComponent, Utilities.DateFormat}
 
-  def mount(%{"id" => id}, _session, socket) do
-    gist = Gists.get_gist!(id)
+  def mount(%{"uuid" => uuid}, _session, socket) do
+    gist = Gists.get_gist_by(%{uuid: uuid})
 
     gist = Map.put(gist, :rel_time, DateFormat.get_relative_time(gist.inserted_at))
     {:ok, assign(socket, gist: gist)}

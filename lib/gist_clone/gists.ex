@@ -27,6 +27,7 @@ defmodule GistClone.Gists do
     Gist
     |> order_by(desc: :updated_at)
     |> Repo.all()
+    |> Repo.preload(:user)
   end
 
   @doc """
@@ -44,6 +45,8 @@ defmodule GistClone.Gists do
 
   """
   def get_gist!(id), do: Repo.get!(Gist, id)
+
+  def get_gist_by(attrs), do: Repo.get_by(Gist, attrs)
 
   @doc """
   Creates a gist.

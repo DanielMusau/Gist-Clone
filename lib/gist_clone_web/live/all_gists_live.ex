@@ -28,10 +28,10 @@ defmodule GistCloneWeb.AllGistsLive do
           />
           <div class="flex flex-col ml-4">
             <div class="font-bold text-base text-dmLavender-dark">
-              <%= @gist.user_id %> <span class="text-white"> / </span><%= @gist.name %>
+              <%= @gist.user.username %> <span class="text-white"> / </span><%= @gist.name %>
             </div>
             <div class="text-white font-bold text-lg">
-              <%= DateFormat.get_relative_time(@gist.updated_at) %>
+              <%= "Created #{DateFormat.get_relative_time(@gist.updated_at)}" %>
             </div>
             <div class="text-white text-sm">
               <%= @gist.description %>
@@ -73,5 +73,5 @@ defmodule GistCloneWeb.AllGistsLive do
     end
   end
 
-  defp get_preview_text(gist), do: ""
+  defp get_preview_text(_gist), do: ""
 end

@@ -82,7 +82,7 @@ defmodule GistCloneWeb.GistFormComponent do
         changeset = Gists.change_gist(%Gist{})
         socket = assign(socket, form: to_form(changeset))
         # Navigate to show the gist after successful creation
-        {:noreply, push_navigate(socket, to: ~p"/gist?#{[id: gist]}")}
+        {:noreply, push_navigate(socket, to: ~p"/gist?#{[uuid: gist.uuid]}")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, :form, to_form(changeset))}
@@ -92,7 +92,7 @@ defmodule GistCloneWeb.GistFormComponent do
   defp update_gist(params, socket) do
     case Gists.update_gist(socket.assigns.current_user, params) do
       {:ok, gist} ->
-        {:noreply, push_navigate(socket, to: ~p"/gist?#{[id: gist]}")}
+        {:noreply, push_navigate(socket, to: ~p"/gist?#{[uuid: gist.uuid]}")}
 
       {:error, message} ->
         socket = put_flash(socket, :error, message)

@@ -10,7 +10,7 @@ defmodule GistCloneWeb.UserSettingsLive do
         Account Settings
       </h1>
       <h3 class="font-brand font-bold text-l text-white">
-        Manage your account email address and password settings
+        Manage your account email address, username and password settings
       </h3>
     </div>
 
@@ -18,6 +18,7 @@ defmodule GistCloneWeb.UserSettingsLive do
       <div>
         <.form for={@email_form} id="email_form" phx-submit="update_email" phx-change="validate_email">
           <.input field={@email_form[:email]} type="email" placeholder="Email" required />
+          <.input field={@email_form[:username]} type="text" placeholder="Username" required />
           <.input
             field={@email_form[:current_password]}
             name="current_password"

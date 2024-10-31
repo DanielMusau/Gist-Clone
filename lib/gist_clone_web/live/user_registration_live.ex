@@ -36,6 +36,7 @@ defmodule GistCloneWeb.UserRegistrationLive do
         </.error>
 
         <.input field={@form[:email]} type="email" placeholder="Email" required />
+        <.input field={@form[:username]} type="text" placeholder="Username" required />
         <.input field={@form[:password]} type="password" placeholder="Password" required />
         <div class="py-6">
           <.button phx-disable-with="Creating account..." class="create_button w-full">

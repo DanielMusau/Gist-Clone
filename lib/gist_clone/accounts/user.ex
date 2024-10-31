@@ -8,6 +8,7 @@ defmodule GistClone.Accounts.User do
   schema "users" do
     field :uuid, Ecto.UUID, autogenerate: true
     field :email, :string
+    field :username, :string
     field :password, :string, virtual: true, redact: true
     field :hashed_password, :string, redact: true
     field :current_password, :string, virtual: true, redact: true
@@ -45,7 +46,7 @@ defmodule GistClone.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :username])
     |> validate_email(opts)
     |> validate_password(opts)
   end
