@@ -3,6 +3,7 @@
     All Gists
   </h1>
 </div>
+
 <%= for gist <- @gists do %>
   <.gist gist={gist} current_user={@current_user} />
 <% end %>

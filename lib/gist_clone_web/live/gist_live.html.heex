@@ -7,8 +7,16 @@
         class="round-image-padding h-8 w-8 mb-6"
       />
       <div class="flex flex-col ml-4">
-        <div class="font-bold text-base text-white">
-          <%= @current_user.username %><span> / </span><%= @gist.name %>
+        <div class="font-bold text-base text-dmLavender">
+          <%= @gist.user.username %><span> / </span>
+          <a
+            href="#"
+            phx-click="navigate_to_gist"
+            phx-value-id={@gist.id}
+            class="text-dmLavender font-bold hover:border-b-2 hover:border-dmLavender-dark"
+          >
+            <%= @gist.name %>
+          </a>
         </div>
         <div class="text-lg text-white font-bold">
           <%= "Created #{@gist.rel_time}" %>
@@ -37,7 +45,7 @@
 <div id="syntax-section" style="display: block">
   <div class="justify-center px-28 w-full mb-10">
     <div class="flex p-2 items-center justify-between bg-dmDark rounded-t-md border">
-      <div class="w-[300px] pl-2 font-brand font-bold text-base text-dmLavender-dark">
+      <div class="w-[300px] pl-2 font-brand font-bold text-base text-dmLavender-light">
         <%= @gist.name %>
       </div>
       <div>

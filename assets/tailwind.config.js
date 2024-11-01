@@ -26,9 +26,9 @@ module.exports = {
           light: "#E88FE5"
         },
         dmLavender: {
-          dark: "#8C52FF",
-          DEFAULT: "#9D74EE",
-          light: "#BC9AFF"
+          dark: "#214fc6",
+          DEFAULT: "#007fff",
+          light: "#318ce7"
         }
       },
       fontFamily: {

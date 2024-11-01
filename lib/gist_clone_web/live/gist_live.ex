@@ -22,4 +22,9 @@ defmodule GistCloneWeb.GistLive do
         {:noreply, socket}
     end
   end
+
+  def handle_event("navigate_to_gist", %{"id" => gist_id}, socket) do
+    gist = Gists.get_gist!(gist_id)
+    {:noreply, push_navigate(socket, to: ~p"/gist?#{[uuid: gist.uuid]}")}
+  end
 end

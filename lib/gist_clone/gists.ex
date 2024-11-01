@@ -23,11 +23,24 @@ defmodule GistClone.Gists do
     Repo.all(Gist)
   end
 
-  def return_sorted_gists do
+  def return_sorted_gists(page, per_page) do
+    offset = (page - 1) * per_page
+
     Gist
     |> order_by(desc: :updated_at)
+    |> limit(^per_page)
+    |> offset(^offset)
     |> Repo.all()
     |> Repo.preload(:user)
+  end
+
+  def total_pages(per_page) do
+    count = Repo.aggregate(Gist, :count, :id)
+    Float.ceil(count / per_page)
+  end
+
+  def total_gists_count do
+    Repo.aggregate(Gist, :count, :id)
   end
 
   @doc """
@@ -46,7 +59,7 @@ defmodule GistClone.Gists do
   """
   def get_gist!(id), do: Repo.get!(Gist, id)
 
-  def get_gist_by(attrs), do: Repo.get_by(Gist, attrs)
+  def get_gist_by(attrs), do: Repo.get_by(Gist, attrs) |> Repo.preload(:user)
 
   @doc """
   Creates a gist.
