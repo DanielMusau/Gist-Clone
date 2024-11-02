@@ -23,24 +23,18 @@ defmodule GistClone.Gists do
     Repo.all(Gist)
   end
 
-  def return_sorted_gists(page, per_page) do
-    offset = (page - 1) * per_page
-
+  def return_sorted_gists do
     Gist
     |> order_by(desc: :updated_at)
-    |> limit(^per_page)
-    |> offset(^offset)
     |> Repo.all()
     |> Repo.preload(:user)
   end
 
-  def total_pages(per_page) do
-    count = Repo.aggregate(Gist, :count, :id)
-    Float.ceil(count / per_page)
-  end
-
-  def total_gists_count do
-    Repo.aggregate(Gist, :count, :id)
+  def return_paginated_gists(attrs \\ []) do
+    Gist
+    |> order_by(desc: :updated_at)
+    |> preload(:user)
+    |> Repo.paginate(attrs)
   end
 
   @doc """

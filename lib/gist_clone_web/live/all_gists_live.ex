@@ -4,45 +4,38 @@ defmodule GistCloneWeb.AllGistsLive do
   alias GistClone.Gists
   alias GistCloneWeb.Utilities.DateFormat
 
-  @per_page 10
-
   def mount(_params, _session, socket) do
-    gists_count = Gists.total_gists_count()
-
-    socket =
-      socket
-      |> assign(:gists, [])
-      |> assign(:page, 1)
-      |> assign(:total_pages, div(gists_count + @per_page - 1, @per_page))
-
     {:ok, socket}
   end
 
   def handle_params(%{"page" => page}, _uri, socket) do
-    page = String.to_integer(page)
-    gists = Gists.return_sorted_gists(page, @per_page)
-    total_pages = Gists.total_pages(@per_page)
-
-    socket =
-      socket
-      |> assign(:gists, gists)
-      |> assign(:page, page)
-      |> assign(:total_pages, total_pages)
-
-    {:noreply, socket}
+    assigns = get_and_assign_page(page)
+    {:noreply, assign(socket, assigns)}
   end
 
   def handle_params(_params, _uri, socket) do
-    gists = Gists.return_sorted_gists(1, @per_page)
-    total_pages = Gists.total_pages(@per_page)
+    assigns = get_and_assign_page(nil)
+    {:noreply, assign(socket, assigns)}
+  end
 
-    socket =
-      socket
-      |> assign(:gists, gists)
-      |> assign(:page, 1)
-      |> assign(:total_pages, total_pages)
+  def get_and_assign_page(page_num) do
+    IO.inspect(page_num, label: "page_num")
 
-    {:noreply, socket}
+    %{
+      entries: entries,
+      page_number: page_num,
+      page_size: page_size,
+      total_entries: total_entries,
+      total_pages: total_pages
+    } = Gists.return_paginated_gists(%{page: page_num})
+
+    [
+      gists: entries,
+      page_number: page_num,
+      page_size: page_size,
+      total_entries: total_entries,
+      total_pages: total_pages
+    ]
   end
 
   def gist(assigns) do
@@ -116,13 +109,7 @@ defmodule GistCloneWeb.AllGistsLive do
     {:noreply, push_navigate(socket, to: ~p"/gist?#{[uuid: gist.uuid]}")}
   end
 
-  # def handle_event("navigate_page", %{"page" => page}, socket) do
-  #   {:noreply, push_patch(socket, to: ~s"/?page=#{page}")}
-  # end
-  def handle_event("navigate_page", %{"page" => page}, socket) do
-    page = String.to_integer(page)
-
-    # Fetch gists for the new page here
-    {:noreply, assign(socket, page: page)}
+  def handle_event("nav", %{"page" => page}, socket) do
+    {:noreply, push_navigate(socket, to: ~p"/all?page=#{page}")}
   end
 end

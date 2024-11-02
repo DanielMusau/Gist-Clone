@@ -69,14 +69,14 @@ form input[type="text"]:focus, input[type="email"]:focus, input[type="password"]
 
 .syntax-area {
     @apply bg-dmSyntax border border-white text-xs h-auto;
-    border-top: none;
+    /* border-top: none; */
     border-left: none;
 }
 
 .syntax-numbers {
     @apply border border-white font-brand py-[12px] text-xs text-dmDark-light bg-dmSyntax h-auto w-[54px] text-right overflow-hidden resize-none;
     border-right: none;
-    border-top: none;
+    /* border-top: none; */
 }
 
 .syntax-numbers:focus {

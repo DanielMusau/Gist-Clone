@@ -7,3 +7,21 @@
 <%= for gist <- @gists do %>
   <.gist gist={gist} current_user={@current_user} />
 <% end %>
+
+<div class="flex justify-center text-white">
+  <%= if @page_number > 1 do %>
+    <button phx-click="nav" phx-value-page={@page_number - 1} class="hover:text-dmLavender">
+      Previous
+    </button>
+  <% end %>
+
+  <span class="mx-4">
+    Page <%= @page_number %> of <%= @total_pages %>
+  </span>
+
+  <%= if @page_number < @total_pages do %>
+    <button phx-click="nav" phx-value-page={@page_number + 1} class="hover:text-dmLavender">
+      Next
+    </button>
+  <% end %>
+</div>
